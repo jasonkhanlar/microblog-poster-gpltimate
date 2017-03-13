@@ -395,9 +395,7 @@ class MicroblogPoster_Poster_Update {
             if ( isset( $_POST['mbp_microblogposter_category_to_account'] ) && $_POST['mbp_microblogposter_category_to_account'] == "on" ) {
                 $cdriven = true;
             }
-        }
-        else
-        {
+        } else {
             $default_behavior_cat_driven_name = "microblogposter_default_behavior_cat_driven";
             $cdriven = get_option( $default_behavior_cat_driven_name, false );
         }
@@ -448,8 +446,7 @@ class MicroblogPoster_Poster_Update {
                             }
                         }
                     }
-                }
-                elseif ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_mp' ) && $dash == 1 && $mp['val'] == 1 && $old == 0 ) {
+                } elseif ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_mp' ) && $dash == 1 && $mp['val'] == 1 && $old == 0 ) {
                     $active = MicroblogPoster_Poster_Enterprise::filter_single_account_mp( $plurk_account['account_id'] );
                     if ( $active === false ) {
                         continue;
@@ -458,8 +455,7 @@ class MicroblogPoster_Poster_Update {
                             $plurk_account['message_format'] = $active['message_format'];
                         }
                     }
-                }
-                elseif ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster', 'filter_single_account_old' ) && $dash == 1 && $mp['val'] == 0 && $old == 1 ) {
+                } elseif ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster', 'filter_single_account_old' ) && $dash == 1 && $mp['val'] == 0 && $old == 1 ) {
                     if ( $cdriven && MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_cdriven_old' ) ) {
                         $active = MicroblogPoster_Poster_Enterprise::filter_single_account_cdriven_old( $plurk_account['account_id'], $post_ID, $plurk_account['extra'] );
                         if ( $active === false ) {
@@ -469,8 +465,7 @@ class MicroblogPoster_Poster_Update {
                                 $plurk_account['message_format'] = $active['message_format'];
                             }
                         }
-                    }
-                    else
+                    } else
                     {
                         $active = MicroblogPoster_Poster::filter_single_account_old( $plurk_account['account_id'] );
                         if ( $active === false ) {
@@ -482,8 +477,7 @@ class MicroblogPoster_Poster_Update {
                         }
                     }
                     
-                }
-                elseif ( $cdriven && MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_cdriven_wodash' ) ) {
+                } elseif ( $cdriven && MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_cdriven_wodash' ) ) {
                     $active = MicroblogPoster_Poster_Enterprise::filter_single_account_cdriven_wodash( $plurk_account['account_id'], $post_ID, $plurk_account['extra'] );
                     if ( $active === false ) {
                         continue;
@@ -495,8 +489,7 @@ class MicroblogPoster_Poster_Update {
                     $plurk_account['message_format'] = str_ireplace( '{excerpt}', '', $plurk_account['message_format'] );
                     $plurk_account['message_format'] = str_ireplace( '{content}', '', $plurk_account['message_format'] );
                     $update = str_ireplace( MicroblogPoster_Poster_Update::get_shortcodes(), $post_content, $plurk_account['message_format'] );
-                }
-                elseif ( $plurk_account['message_format'] && $mp['val'] == 1 && $mp['type'] == 'link' ) {
+                } elseif ( $plurk_account['message_format'] && $mp['val'] == 1 && $mp['type'] == 'link' ) {
                     $update = str_ireplace( MicroblogPoster_Poster_Update::get_shortcodes_mp(), $post_content, $plurk_account['message_format'] );
                 }
                 
@@ -533,8 +526,7 @@ class MicroblogPoster_Poster_Update {
                 $log_data['log_message'] = $result;
                 if ( $mp['val'] == 1 ) {
                     $log_data['log_type'] = 'manual';
-                }
-                elseif ( $old == 1 ) {
+                } elseif ( $old == 1 ) {
                     $log_data['log_type'] = 'old';
                 }
                 MicroblogPoster_Poster::insert_log( $log_data );
