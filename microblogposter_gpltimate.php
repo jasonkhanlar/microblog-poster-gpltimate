@@ -21,64 +21,65 @@
 // Exit if accessed directly
 if ( !defined( 'ABSPATH' ) ) exit;
 // Exit if class exists already
-if ( class_exists( 'MicroblogPoster_Poster_GPLtimate' ) ) exit;
+if ( !class_exists( 'MicroblogPoster_Poster_GPLtimate' ) ) {
+    class MicroblogPoster_Poster_GPLtimate {
 
-class MicroblogPoster_Poster_GPLtimate {
-
-    private static function check_dependencies() {
-        if ( ! is_plugin_active( 'microblog-poster/microblogposter.php' ) && current_user_can( 'activate_plugins' ) ) {
-            echo 'Sorry, but the ' . get_plugin_data( __FILE__ )['Name'] . ' plugin requires the Microblog Poster plugin to be installed and active.';
-            exit;
+        private static function check_dependencies() {
+            if ( ! is_plugin_active( 'microblog-poster/microblogposter.php' ) && current_user_can( 'activate_plugins' ) ) {
+                echo 'Sorry, but the ' . get_plugin_data( __FILE__ )['Name'] . ' plugin requires the Microblog Poster plugin to be installed and active.';
+                exit;
+            }
+            if ( !MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster', 'is_method_callable' ) == true ) {
+                echo 'Sorry, but the Microblog Poster plugin is no longer compatible with the ' . get_plugin_data( __FILE__ )['Name'] . ' plugin.';
+                exit;
+            }
         }
-        if ( ! MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster', 'is_method_callable' ) == true ) {
-            echo 'Sorry, but the Microblog Poster plugin is no longer compatible with the ' . get_plugin_data( __FILE__ )['Name'] . ' plugin.';
-            exit;
-        }
-    }
 
-    public static function activate() {
-        self::check_dependencies();
-        update_option( 'microblogposterpro_plg_customer_license_key', '{"key":"board", "verified":true}' );
-    }
+        public static function activate() {
+            self::check_dependencies();
+            update_option( 'microblogposterpro_plg_customer_license_key', '{"key":"board", "verified":true}' );
+        }
     
-    public static function deactivate() {
-        delete_option( 'microblogposterpro_plg_customer_license_key' );
-    }
+        public static function deactivate() {
+            delete_option( 'microblogposterpro_plg_customer_license_key' );
+        }
 
-    public static function update_actions() {
-	/* Replace Microblog Poster actions  */
-        //remove_action( 'plugins_loaded', array( 'MicroblogPoster_Poster', 'load_languages' ) );
+        public static function update_actions() {
+	    /* Replace Microblog Poster actions  */
+            //remove_action( 'plugins_loaded', array( 'MicroblogPoster_Poster', 'load_languages' ) );
 
-        remove_action( 'publish_post', array( 'MicroblogPoster_Poster', 'update' ) );
-        add_action( 'publish_post', array( 'MicroblogPoster_Poster_Update', 'update' ) );
+            remove_action( 'publish_post', array( 'MicroblogPoster_Poster', 'update' ) );
+            add_action( 'publish_post', array( 'MicroblogPoster_Poster_Update', 'update' ) );
 
-        //$page_mode_name = "microblogposter_page_mode";
-        //$page_mode_value = get_option( $page_mode_name, "" );
-        //if ( $page_mode_value ) {
-        //    remove_action( 'publish_page', array( 'MicroblogPoster_Poster', 'update' ) );
-        //}
+            //$page_mode_name = "microblogposter_page_mode";
+            //$page_mode_value = get_option( $page_mode_name, "" );
+            //if ( $page_mode_value ) {
+            //    remove_action( 'publish_page', array( 'MicroblogPoster_Poster', 'update' ) );
+            //}
 
-        //$enabled_custom_types_name = "microblogposter_enabled_custom_types";
-        //$enabled_custom_types_value = get_option( $enabled_custom_types_name, "" );
-        //$enabled_custom_types = json_decode( $enabled_custom_types_value, true );
-        //if ( is_array( $enabled_custom_types ) && !empty( $enabled_custom_types ) ) {
-        //    foreach( $enabled_custom_types as $custom_type ) {
-        //        remove_action( 'publish_' . $custom_type, array( 'MicroblogPoster_Poster', 'update' ) );
-        //    }
-        //}
+            //$enabled_custom_types_name = "microblogposter_enabled_custom_types";
+            //$enabled_custom_types_value = get_option( $enabled_custom_types_name, "" );
+            //$enabled_custom_types = json_decode( $enabled_custom_types_value, true );
+            //if ( is_array( $enabled_custom_types ) && !empty( $enabled_custom_types ) ) {
+            //    foreach( $enabled_custom_types as $custom_type ) {
+            //        remove_action( 'publish_' . $custom_type, array( 'MicroblogPoster_Poster', 'update' ) );
+            //    }
+            //}
 
-        //remove_action( 'microblogposter_plg_old_posts_publish', array( 'MicroblogPoster_Poster', 'handle_old_posts_publish' ) );
+            //remove_action( 'microblogposter_plg_old_posts_publish', array( 'MicroblogPoster_Poster', 'handle_old_posts_publish' ) );
 
-        //remove_filter( 'cron_schedules', array( 'MicroblogPoster_Poster', 'add_new_cron_interval' ) );
+            //remove_filter( 'cron_schedules', array( 'MicroblogPoster_Poster', 'add_new_cron_interval' ) );
 
-        //remove_action( 'admin_menu', 'microblogposter_meta_box' );
+            //remove_action( 'admin_menu', 'microblogposter_meta_box' );
 
-        //$microblogposter_plugin = 'microblog-poster/microblogposter.php'; 
-        //remove_filter( "plugin_action_links_{$microblogposter_plugin}", 'microblogposter_plugin_settings_link' );
+            //$microblogposter_plugin = 'microblog-poster/microblogposter.php'; 
+            //remove_filter( "plugin_action_links_{$microblogposter_plugin}", 'microblogposter_plugin_settings_link' );
 
-        //remove_action( 'admin_init', 'microblogposter_admin_init' );
+            //remove_action( 'admin_init', 'microblogposter_admin_init' );
 
-        //remove_action( 'admin_menu', 'microblogposter_settings' );
+            //remove_action( 'admin_menu', 'microblogposter_settings' );
+        }
+
     }
 }
 
@@ -402,7 +403,7 @@ class MicroblogPoster_Poster_Update {
         
         @ini_set( 'max_execution_time', '0' );
 
-        MicroblogPoster_Poster::update_twitter( $cdriven, $old, $mp, $dash, $update, $post_content_twitter, $post_ID, $featured_image_src_full );
+        MicroblogPoster_Poster_Update::update_twitter( $cdriven, $old, $mp, $dash, $update, $post_content_twitter, $post_ID, $featured_image_src_full );
         // Add to Plurk: Featured Image
         MicroblogPoster_Poster_Update::update_plurk( $cdriven, $old, $mp, $dash, $update, $post_content, $post_ID );
         MicroblogPoster_Poster::update_delicious( $cdriven, $old, $mp, $dash, $post_title, $permalink, $tags, $post_content, $post_ID );
@@ -424,6 +425,8 @@ class MicroblogPoster_Poster_Update {
 
     public static function update_plurk( $cdriven, $old, $mp, $dash, $update, $post_content, $post_ID ) {
         $plurk_accounts = MicroblogPoster_Poster_Update::get_accounts_by_mode( 'plurk', $post_ID );
+	var_dump($plurk_accounts);
+	echo "\n\n";
         if ( !empty( $plurk_accounts ) ) {
             foreach ( $plurk_accounts as $plurk_account ) {
                 if ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Pro', 'filter_single_account' ) && $dash == 1 && $mp['val'] == 0 && $old == 0 ) {
