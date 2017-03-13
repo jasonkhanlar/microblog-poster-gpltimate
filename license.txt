@@ -1,4 +1,4 @@
-Microblog Poster GPLtimate is a wordpress plugin which extends Microblog Poster
+Microblog Poster GPLtimate is a WordPress plugin which extends Microblog Poster
 Copyright (C) 2017 Jason Khanlar
 
 Microblog Poster GPLtimate is free software; you can redistribute it and/or
