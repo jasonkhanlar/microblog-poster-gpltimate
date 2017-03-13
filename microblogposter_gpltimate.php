@@ -465,8 +465,7 @@ class MicroblogPoster_Poster_Update {
                                 $plurk_account['message_format'] = $active['message_format'];
                             }
                         }
-                    } else
-                    {
+                    } else {
                         $active = MicroblogPoster_Poster::filter_single_account_old( $plurk_account['account_id'] );
                         if ( $active === false ) {
                             continue;
