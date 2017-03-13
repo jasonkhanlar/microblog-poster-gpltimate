@@ -494,7 +494,7 @@ class MicroblogPoster_Poster_Update {
                 
                 $qualifier = "says";
                 $extra = json_decode( $plurk_account['extra'], true );
-                if ( is_array( $extra ) ) {
+                if ( isset( $extra ) && is_array( $extra ) ) {
                     if ( isset( $extra['qualifier'] ) ) {
                         $qualifier = $extra['qualifier'];
                     }
