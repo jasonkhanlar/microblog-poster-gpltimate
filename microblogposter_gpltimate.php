@@ -124,7 +124,7 @@ if ( !class_exists( 'MicroblogPoster_Poster_Enterprise' ) ) {
     }
 }
 
-if ( !class_exists( 'MicroblogPoster_Poster_'Enterprise_Options ) ) {
+if ( !class_exists( 'MicroblogPoster_Poster_Enterprise_Options' ) ) {
     class MicroblogPoster_Poster_Enterprise_Options {
 
         /*
