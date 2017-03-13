@@ -513,7 +513,7 @@ class MicroblogPoster_Poster_Update {
                     $plurk_account['access_token'],
                     $plurk_account['access_token_secret'],
                     "http://www.plurk.com/APP/Timeline/plurkAdd",
-                    array( "content"=>$update, "qualifier"=>$qualifier )
+                    array( "content" => $update, "qualifier" => $qualifier )
                 );
                 
                 $action_result = 2;
