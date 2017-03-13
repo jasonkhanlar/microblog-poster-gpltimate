@@ -1,6 +1,5 @@
 # microblog-poster-gpltimate
-A WordPress plugin
-GPLv2 implementation of MicroblogPoster Pro, Enterprise &amp; Ultimate all-in-one add-on
+An alternative GPLv2 WordPress plugin add-on to extend MicroblogPoster Free to provide same capabilities as the Pro, Enterprise &amp; and Ultimate add-ons
 
 See https://wordpress.org/plugins/microblog-poster/
 
