@@ -11,7 +11,10 @@ The code base, based off of parent plugin, is not clean, but fairly straightforw
 
 # Features
 
-- For Plurk only (currently), '**{FEATURED_IMAGE}**' shortcode can be used to attach the featured image to plurks.
+- **Support for '{FEATURED_IMAGE}' shortcode for Plurk**
+  1. Visit https://site/wp-admin/options-general.php?page=microblogposter.php&t=2
+  2. Add or Edit Plurk account and specify '{FEATURED_IMAGE}' in Message Format
+      - e.g. {FEATURED_IMAGE} {URL} ({TITLE})
 
 # To do
 
