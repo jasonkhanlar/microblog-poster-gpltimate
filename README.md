@@ -10,13 +10,13 @@ Currently this plugin add-on does almost nothing other than provide a framework 
 
 The code base, based off of parent plugin, is not clean, but fairly straightforward.
 
-= Features =
+# Features
 
-- For Plurk only (currently), '{FEATURED_IMAGE}' shortcode can be used to attach the featured image to plurks.
+- For Plurk only (currently), '**{FEATURED_IMAGE}**' shortcode can be used to attach the featured image to plurks.
 
-= To do =
+# To do
 
-== Implement features in Pro add-on ==
+## Implement features in Pro add-on
 
 **(incomplete) Auto re-publish your old blog custom post types**
 
@@ -30,7 +30,7 @@ The code base, based off of parent plugin, is not clean, but fairly straightforw
 
 **(incomplete) Auto publish to VKontakte Groups.**
 
-== Implement features in Enterprise add-on ==
+## Implement features in Enterprise add-on
 
 **(incomplete) MicroblogPoster's Control Dashboard on the new-post page.**
 * (incomplete) Enable/Disable specific social accounts for this particular post.
@@ -45,11 +45,11 @@ The code base, based off of parent plugin, is not clean, but fairly straightforw
 **(incomplete) Additional Url Shorteners.**
 * (incomplete) Currently available: adf.ly, adfoc.us, p.pw
 
-== Implement features in Ultimate add-on ==
+## Implement features in Ultimate add-on
 
 **(incomplete) Multi-Author Mode.**
 * (incomplete) Authors can link auto publishing to their own social accounts.
 
-== Implement additional features ==
+## Implement additional features
 
 **(incomplete) Replace cURL dependency with WordPress HTTP API**
