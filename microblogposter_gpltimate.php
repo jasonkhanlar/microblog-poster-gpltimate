@@ -144,8 +144,8 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro' ) ) {
     class MicroblogPoster_Poster_Pro {
 
         /* Typo in original plugin */
-        public static function filter_sifngle_account() {
-            return self::filter_single_account();
+        public static function filter_sifngle_account( $account_id ) {
+            return self::filter_single_account( $account_id );
         }
 
         /**
@@ -154,7 +154,7 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro' ) ) {
         * @param int $account_id
         * @return mixed
         */
-        public static function filter_single_account($account_id) {
+        public static function filter_single_account( $account_id ) {
             global $wpdb;
 
             $table_accounts = $wpdb->prefix . 'microblogposter_accounts';
