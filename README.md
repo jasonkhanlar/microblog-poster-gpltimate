@@ -15,14 +15,15 @@ The code base, based off of parent plugin, is not clean, but fairly straightforw
   1. Visit https://site/wp-admin/options-general.php?page=microblogposter.php&t=2
   2. Add or Edit Plurk account and specify '{FEATURED_IMAGE}' in Message Format
       - e.g. {FEATURED_IMAGE} {URL} ({TITLE})
+- **Support for including FEATURED IMAGE for Twitter**
+  1. Visit https://site/wp-admin/options-general.php?page=microblogposter.php&t=2
+  2. Add or Edit Twitter account and enable 'Include featured image'
 
 # To do
 
 ## Implement features in Pro add-on
 
 **(incomplete) Auto re-publish your old blog custom post types**
-
-**(incomplete) Auto publish to twitter with image**
 
 **(incomplete) Cross post to Facebook groups**
 

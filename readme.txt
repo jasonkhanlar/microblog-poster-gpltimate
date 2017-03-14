@@ -13,7 +13,7 @@ A GPLv2 wordpress plugin helper which provides an alternative implementation of 
 
 **(incomplete) Auto re-publish your old blog custom post types**
 
-**(incomplete) Auto publish to twitter with image**
+**Auto publish to twitter with featured image**
 
 **(incomplete) Cross post to Facebook groups**
 
@@ -41,8 +41,13 @@ A GPLv2 wordpress plugin helper which provides an alternative implementation of 
 
 **(incomplete) Replace cURL dependency with WordPress HTTP API**
 
+**Support for '{FEATURED_IMAGE}' shortcode for Plurk**
+
 == Changelog ==
 
+= 0.0.2 (03-14-2017) =
+- Implemented support for FEATURED IMAGE for Twitter
+- Implemented '{FEATURED_IMAGE}' shortcode for Plurk
 = 0.0.1 (03-13-2017) =
 - First developmental version of plugin released.
 
