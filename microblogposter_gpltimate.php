@@ -144,26 +144,98 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro' ) ) {
     class MicroblogPoster_Poster_Pro {
 
         /* Typo in original plugin */
-        /*
         public static function filter_sifngle_account() {
             return self::filter_single_account();
         }
-        */
 
-        /*
-        public static function filter_single_account() {
-        }
+        /**
+        * Filters single social account
+        *
+        * @param int $account_id
+        * @return mixed
         */
+        public static function filter_single_account($account_id) {
+            global $wpdb;
+
+            $table_accounts = $wpdb->prefix . 'microblogposter_accounts';
+
+            $sql = "SELECT * FROM $table_accounts WHERE account_id={$account_id}";
+            if (MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Ultimate', 'resolve_sql_old_posts' ) ) {
+                $sql .= MicroblogPoster_Poster_Ultimate::resolve_sql_old_posts();
+            }
+            $rows = $wpdb->get_results( $sql );
+            if ( empty( $rows ) ) return false;
+            $row = $rows[0];
+            $extra = json_decode( $row->extra, true );
+
+            $active = false;
+            if ( isset( $extra['old_posts_active'] ) && $extra['old_posts_active'] == 1 ) {
+                $message_format = $extra['message_format_old'];
+                $active = array();
+                $active['message_format'] = $message_format;
+            }
+
+            return $active;
+        }
 
         /*
         public static function handle_old_posts_publish() {
         }
         */
 
-        /*
-        public static function send_signed_request_and_upload() {
-        }
+        /**
+        * Sends OAuth signed request
+        *
+        * @param   string  $curl curl
+        * @param   string  $c_key Application consumer key
+        * @param   string  $c_secret Application consumer secret
+        * @param   string  $token Account access token
+        * @param   string  $token_secret Account access token secret
+        * @param   string  $api_url URL of the API end point
+        * @param   string  $params Parameters to be passed
+        * @return  void
         */
+        public static function send_signed_request_and_upload( $curl, $c_key, $c_secret, $token, $token_secret, $api_url, $params ) {
+            $consumer = new MicroblogPosterOAuthConsumer( $c_key, $c_secret );
+            $access_token = new MicroblogPosterOAuthConsumer( $token, $token_secret );
+
+            $request = MicroblogPosterOAuthRequest::from_consumer_and_token(
+                $consumer,
+                $access_token,
+                "POST",
+                $api_url,
+                $params
+            );
+            $hmac_method = new MicroblogPosterOAuthSignatureMethod_HMAC_SHA1();
+            $request->sign_request( $hmac_method, $consumer, $access_token );
+
+            $body = new stdClass();
+            $body->url = $params['image_url'];
+	    $body->media_data = base64_encode( file_get_contents( $params['image_url'] ) );
+
+            if ( ( $pos = strpos( $request, "?" ) ) !== false ) {
+                $url = substr( $request, 0, $pos );
+                $parameters = substr( $request, $pos + 1 );
+            }
+        
+            $parametersArray = explode( '&', $parameters );
+            $authHeader = "OAuth ";
+            foreach( $parametersArray as $parametersE ) {
+                $parametersTemp = explode( '=', $parametersE );
+                $authHeader .= $parametersTemp[0] . '="' . $parametersTemp[1] . '",';
+            }
+        
+            $headers = array(
+                'Content-type'  => 'multipart/form-data',
+                'Authorization' => $authHeader
+            );
+        
+            $curl = new MicroblogPoster_Curl();
+            $curl->set_headers( $headers );
+            $result = $curl->send_post_data_json( $request->to_url(), $body );
+
+            return $result;
+        }
 
         /*
         public static function show_control_dashboard() {
@@ -388,8 +460,8 @@ if ( !class_exists( 'MicroblogPoster_Poster_Update' ) ) {
             $post_content_twitter = $post_content;
             $post_content_twitter[3] = $shortened_permalink_twitter;
 
-	// Add featured image for next shortcode, see private static function get_shortcodes()
-	$post_content[] = $featured_image_src_full;
+	    // Add featured image for next shortcode, see private static function get_shortcodes()
+	    $post_content[] = $featured_image_src_full;
 
             $tags = MicroblogPoster_Poster::get_post_tags( $post_ID );
 
@@ -438,8 +510,6 @@ if ( !class_exists( 'MicroblogPoster_Poster_Update' ) ) {
 
         public static function update_plurk( $cdriven, $old, $mp, $dash, $update, $post_content, $post_ID ) {
             $plurk_accounts = MicroblogPoster_Poster_Update::get_accounts_by_mode( 'plurk', $post_ID );
-	var_dump($plurk_accounts);
-	echo "\n\n";
             if ( !empty( $plurk_accounts ) ) {
                 foreach ( $plurk_accounts as $plurk_account ) {
                     if ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Pro', 'filter_single_account' ) && $dash == 1 && $mp['val'] == 0 && $old == 0 ) {
@@ -491,7 +561,6 @@ if ( !class_exists( 'MicroblogPoster_Poster_Update' ) ) {
                                 }
                             }
                         }
-
                     } elseif ( $cdriven && MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_cdriven_wodash' ) ) {
                         $active = MicroblogPoster_Poster_Enterprise::filter_single_account_cdriven_wodash( $plurk_account['account_id'], $post_ID, $plurk_account['extra'] );
                         if ( $active === false ) {
@@ -535,6 +604,148 @@ if ( !class_exists( 'MicroblogPoster_Poster_Update' ) ) {
                     $log_data['account_id'] = $plurk_account['account_id'];
                     $log_data['account_type'] = "plurk";
                     $log_data['username'] = $plurk_account['username'];
+                    $log_data['post_id'] = $post_ID;
+                    $log_data['action_result'] = $action_result;
+                    $log_data['update_message'] = $update;
+                    $log_data['log_message'] = $result;
+                    if ( $mp['val'] == 1 ) {
+                        $log_data['log_type'] = 'manual';
+                    } elseif ( $old == 1 ) {
+                        $log_data['log_type'] = 'old';
+                    }
+                    MicroblogPoster_Poster::insert_log( $log_data );
+                }
+            }
+        }
+
+        public static function update_twitter( $cdriven, $old, $mp, $dash, $update, $post_content, $post_ID, $featured_image_src_full ) {   
+            $twitter_accounts = MicroblogPoster_Poster_Update::get_accounts_by_mode( 'twitter', $post_ID );
+            if ( !empty( $twitter_accounts ) ) {
+                foreach( $twitter_accounts as $twitter_account ) {
+                    if ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Pro', 'filter_single_account' ) && $dash == 1 && $mp['val'] == 0 && $old == 0 ) {
+                        if ( $cdriven && MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_cdriven' ) ) {
+                            $active = MicroblogPoster_Poster_Enterprise::filter_single_account_cdriven( $twitter_account['account_id'], $post_ID, $twitter_account['extra'] );
+                            if ( $active === false ) {
+                                continue;
+                            } else {
+                                if ( isset( $active['message_format'] ) && $active['message_format'] ) {
+                                    $twitter_account['message_format'] = $active['message_format'];
+                                }
+                            }
+                        } else {
+                            $active = MicroblogPoster_Poster_Pro::filter_single_account( $twitter_account['account_id'] );
+                            if ( $active === false ) {
+                                continue;
+                            } else {
+                                if ( isset( $active['message_format'] ) && $active['message_format'] ) {
+                                    $twitter_account['message_format'] = $active['message_format'];
+                                }
+                            }
+                        }
+                    } elseif ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_mp' ) && $dash == 1 && $mp['val'] == 1 && $old == 0 ) {
+                        $active = MicroblogPoster_Poster_Enterprise::filter_single_account_mp( $twitter_account['account_id'] );
+                        if ( $active === false ) {
+                            continue;
+                        } else {
+                            if ( isset( $active['message_format'] ) && $active['message_format'] ) {
+                                $twitter_account['message_format'] = $active['message_format'];
+                            }
+                        }
+                    } elseif ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster', 'filter_single_account_old' ) && $dash == 1 && $mp['val'] == 0 && $old == 1 ) {
+                        if ( $cdriven && MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_cdriven_old' ) ) {
+                            $active = MicroblogPoster_Poster_Enterprise::filter_single_account_cdriven_old( $twitter_account['account_id'], $post_ID, $twitter_account['extra'] );
+                            if ( $active === false ) {
+                                continue;
+                            } else {
+                                if ( isset( $active['message_format'] ) && $active['message_format'] ) {
+                                    $twitter_account['message_format'] = $active['message_format'];
+                                }
+                            }
+                        } else {
+                            $active = MicroblogPoster_Poster::filter_single_account_old( $twitter_account['account_id'] );
+                            if ( $active === false ) {
+                                continue;
+                            } else {
+                                if ( isset( $active['message_format'] ) && $active['message_format'] ) {
+                                    $twitter_account['message_format'] = $active['message_format'];
+                                }
+                            }
+                        }
+                    } elseif ( $cdriven && MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Enterprise', 'filter_single_account_cdriven_wodash' ) ) {
+                        $active = MicroblogPoster_Poster_Enterprise::filter_single_account_cdriven_wodash( $twitter_account['account_id'], $post_ID, $twitter_account['extra'] );
+                        if ( $active === false ) {
+                            continue;
+                        }
+                    }
+
+                    if ( $twitter_account['message_format'] && $mp['val'] == 0 ) {
+                        $twitter_account['message_format'] = str_ireplace( '{manual_excerpt}', '', $twitter_account['message_format'] );
+                        $twitter_account['message_format'] = str_ireplace( '{excerpt}', '', $twitter_account['message_format'] );
+                        $twitter_account['message_format'] = str_ireplace( '{content}', '', $twitter_account['message_format'] );
+                        $update = str_ireplace( MicroblogPoster_Poster_Update::get_shortcodes(), $post_content, $twitter_account['message_format'] );
+                    } elseif ( $twitter_account['message_format'] && $mp['val'] == 1 && $mp['type'] == 'link' ) {
+                        $update = str_ireplace( MicroblogPoster_Poster_Update::get_shortcodes_mp(), $post_content, $twitter_account['message_format'] );
+                    }
+
+                    $media_id_string = "";
+                    $extra = json_decode( $twitter_account['extra'], true );
+                    if ( isset( $extra ) && is_array( $extra ) && isset( $extra['include_featured_image'] ) && $extra['include_featured_image'] == 1 ) {
+                        $include_featured_image = true;
+                    } else {
+                        $include_featured_image = false;
+                    }
+                    if ( MicroblogPoster_Poster::is_method_callable( 'MicroblogPoster_Poster_Pro', 'send_signed_request_and_upload' ) && $include_featured_image && $featured_image_src_full ) {
+                        $curl = new MicroblogPoster_Curl();
+                        $upload_result = MicroblogPoster_Poster_Pro::send_signed_request_and_upload(
+                            $curl,
+                            $twitter_account['consumer_key'],
+                            $twitter_account['consumer_secret'],
+                            $twitter_account['access_token'],
+                            $twitter_account['access_token_secret'],
+                            "https://upload.twitter.com/1.1/media/upload.json",
+                            array( "image_url" => $featured_image_src_full )
+                        );
+                        $upload_result_dec = json_decode( $upload_result, true );
+                        if ( isset( $upload_result_dec['media_id_string'] ) ) {
+                            $media_id_string = $upload_result_dec['media_id_string'];
+                        } else {
+                            $log_data = array();
+                            $log_data['account_id'] = $twitter_account['account_id'];
+                            $log_data['account_type'] = "twitter";
+                            $log_data['username'] = $twitter_account['username'] . ' - Upload Image';
+                            $log_data['post_id'] = 0;
+                            $log_data['action_result'] = 2;
+                            $log_data['update_message'] = '';
+                            $log_data['log_message'] = $upload_result;
+                            MicroblogPoster_Poster::insert_log( $log_data );
+                        }
+                    }
+
+                    $parameters = array( "status" => $update );
+                    if ( isset( $media_id_string ) && $media_id_string ) {
+                        $parameters["media_ids"] = $media_id_string;
+                    }
+
+                    $result = MicroblogPoster_Poster::send_signed_request(
+                        $twitter_account['consumer_key'],
+                        $twitter_account['consumer_secret'],
+                        $twitter_account['access_token'],
+                        $twitter_account['access_token_secret'],
+                        "https://api.twitter.com/1.1/statuses/update.json",
+                        $parameters
+                    );
+
+                    $action_result = 2;
+                    $result_dec = json_decode( $result, true );
+                    if ( $result_dec && isset( $result_dec['id'] ) ) {
+                        $action_result = 1;
+                        $result = "Success";
+                    }
+
+                    $log_data = array();
+                    $log_data['account_id'] = $twitter_account['account_id'];
+                    $log_data['account_type'] = "twitter";
+                    $log_data['username'] = $twitter_account['username'];
                     $log_data['post_id'] = $post_ID;
                     $log_data['action_result'] = $action_result;
                     $log_data['update_message'] = $update;
