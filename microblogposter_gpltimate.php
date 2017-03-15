@@ -108,43 +108,38 @@ if ( !class_exists( 'MicroblogPoster_Poster_GPLtimate' ) ) {
 if ( !class_exists( 'MicroblogPoster_Poster_Enterprise' ) ) {
     class MicroblogPoster_Poster_Enterprise {
 
-        /*
+        // Incomplete
         public static function filter_single_account_cdriven( $account_id, $post_ID, $extra ) {
 	// returns to set value of $active
         }
-        */
 
-        /*
+        // Incomplete
         public static function filter_single_account_cdriven_old( $account_id, $post_ID, $extra ) {
 	// returns to set value of $active
         }
-        */
 
-        /*
+        // Incomplete
         public static function filter_single_account_cdriven_wodash( $account_id, $post_ID, $esxtra ) {
 	// returns to set value of $active
         }
-        */
 
+        // Incomplete
         public static function filter_single_account_mp( $account_id ) {
 		if ( !isset( $_POST['mbp_social_account_microblogposter_' . $account_id] ) ) return false;
 		return array( 'message_format' => $_POST['mbp_social_account_microblogposter_msg_' . $account_id] );
         }
 
-        /*
+        // Incomplete
         public static function shorten_with_adfly( $long_url ) {
         }
-        */
 
-        /*
+        // Incomplete
         public static function shorten_with_adfocus( $long_url ) {
         }
-        */
 
-        /*
+        // Incomplete
         public static function shorten_with_ppw( $long_url ) {
         }
-        */
 
     }
 }
@@ -156,6 +151,7 @@ if ( !class_exists( 'MicroblogPoster_Poster_Enterprise_Options' ) ) {
 	 * Manually auto share to your configured social accounts
 	 * @return bool
 	 */
+        // Incomplete
         public static function handle_manual_post() {
             $post_ID = 0;
 
@@ -363,11 +359,9 @@ if ( !class_exists( 'MicroblogPoster_Poster_Enterprise_Options' ) ) {
 	return true;
         }
 
-
-        /*
-        public static function microblogposter_display_link_categories() {
+        // Incomplete
+        public static function microblogposter_display_link_categories( $link_categories ) {
         }
-        */
 
     }
 }
@@ -386,6 +380,7 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro' ) ) {
         * @param int $account_id
         * @return mixed
         */
+        // Incomplete
         public static function filter_single_account( $account_id ) {
             global $wpdb;
 
@@ -410,10 +405,9 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro' ) ) {
             return $active;
         }
 
-        /*
+        // Incomplete
         public static function handle_old_posts_publish() {
         }
-        */
 
         /**
         * Sends OAuth signed request
@@ -427,6 +421,7 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro' ) ) {
         * @param   string  $params Parameters to be passed
         * @return  void
         */
+        // Incomplete
         public static function send_signed_request_and_upload( $curl, $c_key, $c_secret, $token, $token_secret, $api_url, $params ) {
             $consumer = new MicroblogPosterOAuthConsumer( $c_key, $c_secret );
             $access_token = new MicroblogPosterOAuthConsumer( $token, $token_secret );
@@ -469,35 +464,32 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro' ) ) {
             return $result;
         }
 
-        /*
+        // Incomplete
         public static function show_control_dashboard() {
+            ?>
+            <div>Implement dashboard here</div>
+            <?php
         }
-        */
 
-        /*
-        public static function update_facebook_group() {
+        // Incomplete
+        public static function update_facebook_group( $curl, $acc_extra, $post_data ) {
         }
-        */
 
-        /*
-        public static function update_linkedin_company() {
+        // Incomplete
+        public static function update_linkedin_company( $curl, $acc_extra, $post_data ) {
         }
-        */
 
-        /*
-        public static function update_linkedin_group() {
+        // Incomplete
+        public static function update_linkedin_group( $curl, $acc_extra, $post_data ) {
         }
-        */
 
-        /*
-        public static function update_tumblr_link() {
+        // Incomplete
+        public static function update_tumblr_link( $account, $acc_extra, $post_data ) {
         }
-        */
 
-        /*
-        public static function update_vkontakte_community() {
+        // Incomplete
+        public static function update_vkontakte_community( $curl, $acc_extra, $post_data ) {
         }
-        */
 
     }
 }
@@ -505,8 +497,8 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro' ) ) {
 if ( !class_exists( 'MicroblogPoster_Poster_Pro_Options' ) ) {
     class MicroblogPoster_Poster_Pro_Options {
 
-        /*
-        public static function get_facebook_group_access_token() {
+        // Incomplete
+        public static function get_facebook_group_access_token( $curl, $uid, $access_token, $app_access_token ) {
         }
         */
 
@@ -520,40 +512,32 @@ if ( !class_exists( 'MicroblogPoster_Poster_Pro_Options' ) ) {
 if ( !class_exists( 'MicroblogPoster_Poster_Ultimate' ) ) {
     class MicroblogPoster_Poster_Ultimate {
 
-        /*
+        // Incomplete
         public static function resolve_accounts( $type, $post_ID ) {
         }
-        */
 
-        /*
+        // Incomplete
         public static function resolve_sql_allowed_authors() {
         }
-        */
 
-        /*
+        // Incomplete
         public static function resolve_sql() {
         }
-        */
 
-        /*
+        // Incomplete
         public static function resolve_sql_logs() {
         }
-        */
 
-        /*
+        // Incomplete
         public static function resolve_sql_old_posts() {
         }
-        */
 
-        /*
-        public static function sync() {
+        public static function sync( $user_id ) {
         }
-        */
 
-        /*
-        public static function unsync() {
+        // Incomplete
+        public static function unsync( $user_id ) {
         }
-        */
 
     }
 }
@@ -561,14 +545,14 @@ if ( !class_exists( 'MicroblogPoster_Poster_Ultimate' ) ) {
 if ( !class_exists( 'MicroblogPoster_Poster_Ultimate_Options' ) ) {
     class MicroblogPoster_Poster_Ultimate_Options {
 
-        /*
-        public static function add_cap() {
+        // Incomplete
+        public static function add_cap( $role ) {
         }
-        */
 
         public static function is_loaded() { return true; }
 
         // to do: Save settings
+        // Incomplete
         function microblogposter_display_role_ma( $role_id, $role, $sep, $who_can_auto_publish ) {
             ?>
             <?php echo $sep; ?>
@@ -579,11 +563,11 @@ if ( !class_exists( 'MicroblogPoster_Poster_Ultimate_Options' ) ) {
             <?php
         }
 
-        /*
-        public static function remove_cap() {
+        // Incomplete
+        public static function remove_cap( $role ) {
         }
-        */
 
+        // Incomplete
         public static function render_who_can_ma( $multi_author_mode_name, $multi_author_mode_value, $who_can_auto_publish_ma ) {
             $multi_author_mode_name = "microblogposter_plg_multi_author_mode";
             $multi_author_active = get_option($multi_author_mode_name, 0);
@@ -629,15 +613,13 @@ if ( !class_exists( 'MicroblogPoster_Poster_Ultimate_Options' ) ) {
 	    */
         }
 
-        /*
-        public static function sync_cap() {
+        // Incomplete
+        public static function sync_cap( $who_can_auto_publish_ma_value ) {
         }
-        */
 
-        /*
-        public static function sync_who_can() {
+        // Incomplete
+        public static function sync_who_can( $who_can_auto_publish_ma_name, $who_can_auto_publish_ma_value ) {
         }
-        */
 
     }
 }
