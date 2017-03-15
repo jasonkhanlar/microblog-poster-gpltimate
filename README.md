@@ -23,7 +23,7 @@ The code base, based off of parent plugin, is not clean, but fairly straightforw
 
 ## Implement features in Pro add-on
 
-**(incomplete) Auto re-publish your old blog custom post types**
+- [ ] **Auto re-publish your old blog custom post types**
 
 **(incomplete) Cross post to Facebook groups**
 
