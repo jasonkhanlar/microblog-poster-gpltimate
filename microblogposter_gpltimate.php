@@ -517,11 +517,11 @@ if ( !class_exists( 'MicroblogPoster_Poster_Ultimate' ) ) {
         }
 
         // Incomplete
-        public static function resolve_sql_allowed_authors() {
+        public static function resolve_sql() {
         }
 
         // Incomplete
-        public static function resolve_sql() {
+        public static function resolve_sql_allowed_authors() {
         }
 
         // Incomplete
